@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DISAI | Settings</title>
+<meta name="description" content="Configure your DISAI account, notifications, integrations and security preferences."/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"secondary-fixed-dim":"#afc7fb","primary-fixed-dim":"#adc7ff","on-primary-fixed-variant":"#004493","on-secondary-container":"#9eb5e8","on-secondary-fixed":"#001a41","secondary-fixed":"#d8e2ff","on-surface":"#dae2fd","tertiary-fixed-dim":"#ffb691","surface-bright":"#31394d","on-error-container":"#ffdad6","surface-dim":"#0b1326","primary-fixed":"#d8e2ff","on-tertiary":"#552100","secondary-container":"#2e4673","on-background":"#dae2fd","error-container":"#93000a","error":"#ffb4ab","surface-container-low":"#131b2e","on-secondary-fixed-variant":"#2e4673","on-primary-fixed":"#001a41","outline-variant":"#414754","outline":"#8b909f","surface-tint":"#adc7ff","on-primary-container":"#ffffff","on-secondary":"#15305b","on-tertiary-fixed":"#341100","surface-container":"#171f33","primary-container":"#1a73e8","surface-container-high":"#222a3d","on-tertiary-container":"#0e0200","on-error":"#690005","surface-variant":"#2d3449","primary":"#adc7ff","surface-container-highest":"#2d3449","inverse-on-surface":"#283044","inverse-surface":"#dae2fd","inverse-primary":"#005bc0","tertiary-container":"#c55500","tertiary-fixed":"#ffdbcb","on-tertiary-fixed-variant":"#783100","secondary":"#afc7fb","on-surface-variant":"#c1c6d6","surface":"#0b1326","surface-container-lowest":"#060e20","background":"#0b1326","tertiary":"#ffb691","on-primary":"#002e68"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},fontFamily:{headline:["Manrope"],body:["Inter"],label:["Inter"]}}}}</script>
+<style>
+body{font-family:'Inter',sans-serif;}h1,h2,h3{font-family:'Manrope',sans-serif;}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+.toggle{position:relative;display:inline-block;width:48px;height:26px;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#2d3449;border-radius:26px;transition:.3s;}
+.toggle-slider:before{position:absolute;content:"";height:20px;width:20px;left:3px;bottom:3px;background:#8b909f;border-radius:50%;transition:.3s;}
+.toggle input:checked + .toggle-slider{background:#1a73e8;}
+.toggle input:checked + .toggle-slider:before{transform:translateX(22px);background:#adc7ff;}
+body{min-height:max(884px,100dvh);}
+</style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+
+<header class="fixed top-0 w-full z-50 bg-slate-950/80 backdrop-blur-xl flex justify-between items-center px-6 h-16 border-b border-outline-variant/10">
+  <div class="flex items-center gap-3">
+    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-container to-blue-700 flex items-center justify-center"><span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1;">shield</span></div>
+    <span class="text-xl font-bold tracking-tighter text-slate-100 font-headline">DISAI</span>
+  </div>
+  <div class="flex items-center gap-3">
+    <button class="bg-primary-container text-on-primary-container px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 transition-all active:scale-95">
+      <span class="material-symbols-outlined text-sm">save</span>Save Changes
+    </button>
+  </div>
+</header>
+
+<aside class="h-full w-72 fixed left-0 top-0 bg-slate-900 hidden md:flex flex-col py-8 gap-2 z-40 border-r border-outline-variant/10">
+  <div class="px-6 mb-4 mt-12"><h2 class="text-slate-400 font-bold text-xs uppercase tracking-widest font-headline">Sentinel Core</h2></div>
+  <nav class="flex flex-col gap-1 px-3">
+    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-all font-headline font-semibold" href="dashboard.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
+    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-all font-headline font-semibold" href="sbom-manager.html"><span class="material-symbols-outlined">inventory_2</span>SBOM Manager</a>
+    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-all font-headline font-semibold" href="cve-explorer.html"><span class="material-symbols-outlined">search_check</span>CVE Explorer</a>
+    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-all font-headline font-semibold" href="vulnerability-graph.html"><span class="material-symbols-outlined">hub</span>Vulnerability Graph</a>
+    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-all font-headline font-semibold" href="risk-analytics.html"><span class="material-symbols-outlined">analytics</span>Risk Analytics</a>
+    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-all font-headline font-semibold" href="applications.html"><span class="material-symbols-outlined">apps</span>Applications</a>
+    <a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-600/10 text-blue-400 border-r-2 border-blue-500 transition-all font-headline font-semibold" href="settings.html"><span class="material-symbols-outlined">settings</span>Settings</a>
+  </nav>
+</aside>
+
+<main class="md:ml-72 pt-24 px-6 pb-12">
+  <div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-10">
+      <h1 class="text-4xl font-extrabold tracking-tight mb-2">Settings</h1>
+      <p class="text-on-surface-variant">Configure your DISAI platform, integrations, and security preferences.</p>
+    </div>
+
+    <!-- Settings Tabs -->
+    <div class="flex gap-1 bg-surface-container-low p-1 rounded-xl mb-8 overflow-x-auto border border-outline-variant/10">
+      <button onclick="showTab('profile')" id="tab-profile" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-surface-container-high text-on-surface whitespace-nowrap">Profile</button>
+      <button onclick="showTab('notifications')" id="tab-notifications" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all text-outline hover:text-on-surface whitespace-nowrap">Notifications</button>
+      <button onclick="showTab('integrations')" id="tab-integrations" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all text-outline hover:text-on-surface whitespace-nowrap">Integrations</button>
+      <button onclick="showTab('security')" id="tab-security" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all text-outline hover:text-on-surface whitespace-nowrap">Security</button>
+      <button onclick="showTab('api')" id="tab-api" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all text-outline hover:text-on-surface whitespace-nowrap">API Keys</button>
+    </div>
+
+    <!-- Profile Tab -->
+    <div id="tab-content-profile" class="space-y-6">
+      <!-- Avatar & Name -->
+      <div class="bg-surface-container-low rounded-xl p-8 border border-outline-variant/10">
+        <h2 class="text-lg font-bold font-headline mb-6">Account Profile</h2>
+        <div class="flex items-center gap-6 mb-8">
+          <div class="relative">
+            <div class="w-20 h-20 rounded-2xl bg-primary-container flex items-center justify-center text-2xl font-black text-white">JD</div>
+            <button class="absolute -bottom-1 -right-1 w-7 h-7 bg-surface-container-high rounded-full flex items-center justify-center border-2 border-surface hover:bg-primary transition-colors">
+              <span class="material-symbols-outlined text-xs">edit</span>
+            </button>
+          </div>
+          <div>
+            <h3 class="font-bold text-lg">John Doe</h3>
+            <p class="text-sm text-on-surface-variant">Senior Security Analyst</p>
+            <span class="inline-block mt-1 px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded uppercase tracking-wider">Administrator</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-1">
+            <label class="text-xs font-semibold text-primary">Full Name</label>
+            <input class="w-full bg-surface-container-highest border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 rounded-t-lg px-4 py-3 text-on-surface transition-all" type="text" value="John Doe"/>
+          </div>
+          <div class="space-y-1">
+            <label class="text-xs font-semibold text-primary">Email Address</label>
+            <input class="w-full bg-surface-container-highest border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 rounded-t-lg px-4 py-3 text-on-surface transition-all" type="email" value="john.doe@company.com"/>
+          </div>
+          <div class="space-y-1">
+            <label class="text-xs font-semibold text-primary">Role</label>
+            <select class="w-full bg-surface-container-highest border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 rounded-t-lg px-4 py-3 text-on-surface transition-all">
+              <option>Security Analyst</option><option selected>Senior Security Analyst</option><option>Security Engineer</option><option>CISO</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="text-xs font-semibold text-primary">Organization</label>
+            <input class="w-full bg-surface-container-highest border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 rounded-t-lg px-4 py-3 text-on-surface transition-all" type="text" value="Acme Corp Security Div."/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preferences -->
+      <div class="bg-surface-container-low rounded-xl p-8 border border-outline-variant/10">
+        <h2 class="text-lg font-bold font-headline mb-6">Interface Preferences</h2>
+        <div class="space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="font-semibold text-sm">Dark Mode</p>
+              <p class="text-xs text-on-surface-variant">Always use dark interface theme</p>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="font-semibold text-sm">Compact View</p>
+              <p class="text-xs text-on-surface-variant">Show more data in less space</p>
+            </div>
+            <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="font-semibold text-sm">Auto-refresh Dashboard</p>
+              <p class="text-xs text-on-surface-variant">Refresh every 30 seconds</p>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications Tab (hidden) -->
+    <div id="tab-content-notifications" class="hidden space-y-6">
+      <div class="bg-surface-container-low rounded-xl p-8 border border-outline-variant/10">
+        <h2 class="text-lg font-bold font-headline mb-6">Notification Preferences</h2>
+        <div class="space-y-6">
+          <div class="flex items-center justify-between py-3 border-b border-outline-variant/10">
+            <div><p class="font-semibold text-sm">Critical CVE Alerts</p><p class="text-xs text-on-surface-variant">Immediate alerts for CVSS 9.0+</p></div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="flex items-center justify-between py-3 border-b border-outline-variant/10">
+            <div><p class="font-semibold text-sm">High Risk Alerts</p><p class="text-xs text-on-surface-variant">Alerts for CVSS 7.0-8.9</p></div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="flex items-center justify-between py-3 border-b border-outline-variant/10">
+            <div><p class="font-semibold text-sm">Weekly Report</p><p class="text-xs text-on-surface-variant">Summary emailed every Monday</p></div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="flex items-center justify-between py-3 border-b border-outline-variant/10">
+            <div><p class="font-semibold text-sm">SBOM Upload Success</p><p class="text-xs text-on-surface-variant">Notify when SBOM processing completes</p></div>
+            <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="flex items-center justify-between py-3">
+            <div><p class="font-semibold text-sm">Patch Recommendation</p><p class="text-xs text-on-surface-variant">AI-powered patch suggestions</p></div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Integrations Tab (hidden) -->
+    <div id="tab-content-integrations" class="hidden space-y-6">
+      <div class="bg-surface-container-low rounded-xl p-8 border border-outline-variant/10">
+        <h2 class="text-lg font-bold font-headline mb-6">Connected Integrations</h2>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between p-4 bg-surface-container rounded-xl border border-outline-variant/10">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center"><span class="material-symbols-outlined text-primary">hub</span></div>
+              <div><p class="font-semibold text-sm">GitHub Enterprise</p><p class="text-xs text-on-surface-variant">Repository scanning enabled</p></div>
+            </div>
+            <span class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold rounded-full uppercase">Connected</span>
+          </div>
+          <div class="flex items-center justify-between p-4 bg-surface-container rounded-xl border border-outline-variant/10">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center"><span class="material-symbols-outlined text-secondary">cloud</span></div>
+              <div><p class="font-semibold text-sm">AWS Security Hub</p><p class="text-xs text-on-surface-variant">Cloud posture management</p></div>
+            </div>
+            <span class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold rounded-full uppercase">Connected</span>
+          </div>
+          <div class="flex items-center justify-between p-4 bg-surface-container rounded-xl border border-outline-variant/10">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center"><span class="material-symbols-outlined text-tertiary">view_kanban</span></div>
+              <div><p class="font-semibold text-sm">Jira</p><p class="text-xs text-on-surface-variant">Auto-create tickets for CVEs</p></div>
+            </div>
+            <button class="px-4 py-1 bg-surface-container-high text-on-surface text-xs font-semibold rounded-lg hover:bg-primary hover:text-on-primary transition-all">Connect</button>
+          </div>
+          <div class="flex items-center justify-between p-4 bg-surface-container rounded-xl border border-outline-variant/10">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center"><span class="material-symbols-outlined text-outline">chat</span></div>
+              <div><p class="font-semibold text-sm">Slack Webhooks</p><p class="text-xs text-on-surface-variant">Real-time channel alerts</p></div>
+            </div>
+            <button class="px-4 py-1 bg-surface-container-high text-on-surface text-xs font-semibold rounded-lg hover:bg-primary hover:text-on-primary transition-all">Connect</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security Tab (hidden) -->
+    <div id="tab-content-security" class="hidden space-y-6">
+      <div class="bg-surface-container-low rounded-xl p-8 border border-outline-variant/10">
+        <h2 class="text-lg font-bold font-headline mb-6">Security Settings</h2>
+        <div class="space-y-6">
+          <div class="flex items-center justify-between py-3 border-b border-outline-variant/10">
+            <div><p class="font-semibold text-sm">Two-Factor Authentication</p><p class="text-xs text-on-surface-variant">TOTP via authenticator app</p></div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="flex items-center justify-between py-3 border-b border-outline-variant/10">
+            <div><p class="font-semibold text-sm">Session Timeout</p><p class="text-xs text-on-surface-variant">Auto-logout after inactivity</p></div>
+            <select class="bg-surface-container-highest border-none rounded-lg text-sm px-3 py-1 focus:ring-primary">
+              <option>15 minutes</option><option selected>30 minutes</option><option>1 hour</option><option>Never</option>
+            </select>
+          </div>
+          <div class="flex items-center justify-between py-3 border-b border-outline-variant/10">
+            <div><p class="font-semibold text-sm">IP Allowlist</p><p class="text-xs text-on-surface-variant">Restrict access by IP range</p></div>
+            <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="py-3">
+            <p class="font-semibold text-sm mb-2">Change Password</p>
+            <div class="space-y-3">
+              <input class="w-full bg-surface-container-highest border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-primary placeholder:text-outline" placeholder="Current password" type="password"/>
+              <input class="w-full bg-surface-container-highest border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-primary placeholder:text-outline" placeholder="New password" type="password"/>
+              <button class="px-6 py-2 bg-primary text-on-primary rounded-lg text-sm font-bold hover:brightness-110 transition-all">Update Password</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- API Tab (hidden) -->
+    <div id="tab-content-api" class="hidden space-y-6">
+      <div class="bg-surface-container-low rounded-xl p-8 border border-outline-variant/10">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-lg font-bold font-headline">API Keys</h2>
+          <button class="bg-gradient-to-r from-primary-container to-blue-600 text-on-primary-container px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 hover:scale-[1.02] transition-all">
+            <span class="material-symbols-outlined text-sm">add</span>Generate New Key
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="p-5 bg-surface-container rounded-xl border border-outline-variant/10">
+            <div class="flex justify-between items-start mb-3">
+              <div><p class="font-bold text-sm">Production API Key</p><p class="text-xs text-on-surface-variant">Created Mar 15, 2024</p></div>
+              <span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded uppercase">Active</span>
+            </div>
+            <div class="flex items-center gap-3 bg-surface-container-highest rounded-lg px-4 py-3 font-mono text-sm">
+              <span class="flex-1 text-on-surface-variant">dis_prod_••••••••••••••••••3x9f</span>
+              <button class="text-primary hover:text-white transition-colors"><span class="material-symbols-outlined text-sm">content_copy</span></button>
+            </div>
+            <div class="mt-3 flex gap-2 text-xs text-on-surface-variant">
+              <span>Last used: 2h ago</span>
+              <span>•</span>
+              <span>Read + Write</span>
+            </div>
+          </div>
+          <div class="p-5 bg-surface-container rounded-xl border border-outline-variant/10">
+            <div class="flex justify-between items-start mb-3">
+              <div><p class="font-bold text-sm">CI/CD Pipeline Key</p><p class="text-xs text-on-surface-variant">Created Feb 01, 2024</p></div>
+              <span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded uppercase">Active</span>
+            </div>
+            <div class="flex items-center gap-3 bg-surface-container-highest rounded-lg px-4 py-3 font-mono text-sm">
+              <span class="flex-1 text-on-surface-variant">dis_ci_••••••••••••••••••m2k1</span>
+              <button class="text-primary hover:text-white transition-colors"><span class="material-symbols-outlined text-sm">content_copy</span></button>
+            </div>
+            <div class="mt-3 flex gap-2 text-xs text-on-surface-variant">
+              <span>Last used: 4h ago</span><span>•</span><span>Read Only</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="mt-8 bg-surface-container-low rounded-xl p-8 border border-error/20">
+      <h2 class="text-lg font-bold font-headline text-error mb-2">Danger Zone</h2>
+      <p class="text-sm text-on-surface-variant mb-6">These actions are irreversible. Proceed with caution.</p>
+      <div class="flex flex-wrap gap-3">
+        <button class="px-6 py-2 border border-error/30 text-error rounded-lg text-sm font-semibold hover:bg-error/10 transition-colors">Reset All Settings</button>
+        <button class="px-6 py-2 border border-error/30 text-error rounded-lg text-sm font-semibold hover:bg-error/10 transition-colors">Revoke All Sessions</button>
+        <button class="px-6 py-2 bg-error/10 border border-error text-error rounded-lg text-sm font-bold hover:bg-error hover:text-on-error transition-all">Delete Account</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+function showTab(name) {
+  const tabs = ['profile','notifications','integrations','security','api'];
+  tabs.forEach(t => {
+    const content = document.getElementById('tab-content-'+t);
+    const btn = document.getElementById('tab-'+t);
+    if (t === name) {
+      content.classList.remove('hidden');
+      btn.classList.add('bg-surface-container-high','text-on-surface');
+      btn.classList.remove('text-outline');
+    } else {
+      content.classList.add('hidden');
+      btn.classList.remove('bg-surface-container-high','text-on-surface');
+      btn.classList.add('text-outline');
+    }
+  });
+}
+</script>
+</body>
+</html>

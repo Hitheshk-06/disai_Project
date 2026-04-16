@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DISAI | Dashboard — Global Defense Overview</title>
+<meta name="description" content="DISAI cybersecurity dashboard: real-time vulnerability monitoring, CVE tracking, and ecosystem health."/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "secondary-fixed-dim":"#afc7fb","primary-fixed-dim":"#adc7ff","on-primary-fixed-variant":"#004493",
+          "on-secondary-container":"#9eb5e8","on-secondary-fixed":"#001a41","secondary-fixed":"#d8e2ff",
+          "on-surface":"#dae2fd","tertiary-fixed-dim":"#ffb691","surface-bright":"#31394d",
+          "on-error-container":"#ffdad6","surface-dim":"#0b1326","primary-fixed":"#d8e2ff",
+          "on-tertiary":"#552100","secondary-container":"#2e4673","on-background":"#dae2fd",
+          "error-container":"#93000a","error":"#ffb4ab","surface-container-low":"#131b2e",
+          "on-secondary-fixed-variant":"#2e4673","on-primary-fixed":"#001a41","outline-variant":"#414754",
+          "outline":"#8b909f","surface-tint":"#adc7ff","on-primary-container":"#ffffff",
+          "on-secondary":"#15305b","on-tertiary-fixed":"#341100","surface-container":"#171f33",
+          "primary-container":"#1a73e8","surface-container-high":"#222a3d","on-tertiary-container":"#0e0200",
+          "on-error":"#690005","surface-variant":"#2d3449","primary":"#adc7ff",
+          "surface-container-highest":"#2d3449","inverse-on-surface":"#283044","inverse-surface":"#dae2fd",
+          "inverse-primary":"#005bc0","tertiary-container":"#c55500","tertiary-fixed":"#ffdbcb",
+          "on-tertiary-fixed-variant":"#783100","secondary":"#afc7fb","on-surface-variant":"#c1c6d6",
+          "surface":"#0b1326","surface-container-lowest":"#060e20","background":"#0b1326",
+          "tertiary":"#ffb691","on-primary":"#002e68"
+        },
+        borderRadius: { DEFAULT:"0.25rem", lg:"0.5rem", xl:"0.75rem", full:"9999px" },
+        fontFamily: { headline:["Manrope"], body:["Inter"], label:["Inter"] }
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family:'Inter',sans-serif; }
+  h1,h2,h3,.font-headline { font-family:'Manrope',sans-serif; }
+  .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+  .text-glow-primary { text-shadow: 0 0 20px rgba(173,199,255,0.35); }
+  .tonal-stack { transition: background-color 0.3s ease; }
+  @keyframes countUp { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+  .stat-val { animation: countUp 0.6s ease forwards; }
+  body { min-height: max(884px, 100dvh); }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-white">
+
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-slate-950/80 backdrop-blur-xl flex justify-between items-center px-6 h-16 border-b border-outline-variant/10">
+  <div class="flex items-center gap-3">
+    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-container to-blue-700 flex items-center justify-center">
+      <span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1;">shield</span>
+    </div>
+    <span class="text-xl font-extrabold tracking-tighter text-slate-100 font-headline">DISAI</span>
+  </div>
+  <div class="flex items-center gap-4">
+    <div class="hidden md:flex gap-6 mr-6 font-headline font-bold tracking-tight text-sm">
+      <a class="text-blue-400 hover:bg-white/5 transition-colors px-3 py-1 rounded" href="dashboard.html">Dashboard</a>
+      <a class="text-slate-400 hover:text-slate-100 hover:bg-white/5 transition-colors px-3 py-1 rounded" href="risk-analytics.html">Analytics</a>
+      <a class="text-slate-400 hover:text-slate-100 hover:bg-white/5 transition-colors px-3 py-1 rounded" href="cve-explorer.html">Security</a>
+    </div>
+    <button class="p-2 hover:bg-white/5 rounded-full transition-colors text-slate-400">
+      <span class="material-symbols-outlined">notifications</span>
+    </button>
+    <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-xs font-bold text-white cursor-pointer">JD</div>
+  </div>
+</header>
+
+<!-- Sidebar -->
+<aside class="h-full w-72 fixed left-0 top-0 bg-slate-900 hidden md:flex flex-col py-8 gap-2 z-40 pt-20 border-r border-outline-variant/10">
+  <div class="px-6 mb-4">
+    <h2 class="text-slate-400 font-bold font-headline text-xs uppercase tracking-widest">Sentinel Core</h2>
+  </div>
+  <nav class="flex flex-col gap-1 px-4">
+    <a class="flex items-center gap-3 px-4 py-3 bg-blue-600/10 text-blue-400 border-r-2 border-blue-500 font-headline font-semibold transition-all duration-300 rounded-l-lg" href="dashboard.html">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">dashboard</span>
+      <span>Dashboard</span>
+    </a>
+    <a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 font-headline font-semibold transition-all duration-300 rounded-lg" href="sbom-manager.html">
+      <span class="material-symbols-outlined">inventory_2</span><span>SBOM Manager</span>
+    </a>
+    <a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 font-headline font-semibold transition-all duration-300 rounded-lg" href="cve-explorer.html">
+      <span class="material-symbols-outlined">search_check</span><span>CVE Explorer</span>
+    </a>
+    <a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 font-headline font-semibold transition-all duration-300 rounded-lg" href="vulnerability-graph.html">
+      <span class="material-symbols-outlined">hub</span><span>Vulnerability Graph</span>
+    </a>
+    <a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 font-headline font-semibold transition-all duration-300 rounded-lg" href="risk-analytics.html">
+      <span class="material-symbols-outlined">analytics</span><span>Risk Analytics</span>
+    </a>
+    <a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 font-headline font-semibold transition-all duration-300 rounded-lg" href="applications.html">
+      <span class="material-symbols-outlined">apps</span><span>Applications</span>
+    </a>
+  </nav>
+  <div class="mt-auto px-4 pb-4">
+    <a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 font-headline font-semibold transition-all duration-300 rounded-lg" href="settings.html">
+      <span class="material-symbols-outlined">settings</span><span>Settings</span>
+    </a>
+    <a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 font-headline font-semibold transition-all duration-300 rounded-lg" href="index.html">
+      <span class="material-symbols-outlined">logout</span><span>Sign Out</span>
+    </a>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="md:pl-72 pt-16 min-h-screen">
+  <div class="p-6 lg:p-8 max-w-[1600px] mx-auto">
+
+    <!-- Page Header -->
+    <header class="mb-10 pt-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
+        <div>
+          <h1 class="text-3xl lg:text-4xl font-extrabold font-headline tracking-tighter text-glow-primary mb-2">Global Defense Overview</h1>
+          <p class="text-on-surface-variant max-w-2xl text-lg leading-relaxed">Real-time surveillance of ecosystem vulnerabilities. Monitoring <span class="text-primary font-semibold">14 automated nodes</span> and <span class="text-primary font-semibold">1.2M lines</span> of secure code.</p>
+        </div>
+        <div class="flex items-center gap-2 bg-surface-container-low border border-outline-variant/20 rounded-xl px-4 py-2">
+          <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+          <span class="text-xs font-bold text-green-400 uppercase tracking-wider">All Systems Operational</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="bg-surface-container-low p-6 rounded-xl tonal-stack hover:bg-surface-container border border-outline-variant/10 relative overflow-hidden group cursor-pointer transition-all">
+        <div class="flex justify-between items-start mb-4">
+          <span class="material-symbols-outlined text-primary text-3xl">apps</span>
+          <span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">LIVE</span>
+        </div>
+        <div class="relative z-10">
+          <p class="text-sm font-label text-on-surface-variant uppercase tracking-widest mb-1">Apps Scanned</p>
+          <h3 class="text-3xl font-extrabold font-headline tracking-tight stat-val">1,284</h3>
+        </div>
+        <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+          <span class="material-symbols-outlined text-8xl">apps</span>
+        </div>
+      </div>
+
+      <div class="bg-surface-container-low p-6 rounded-xl tonal-stack hover:bg-surface-container border border-outline-variant/10 relative overflow-hidden group cursor-pointer transition-all">
+        <div class="flex justify-between items-start mb-4">
+          <span class="material-symbols-outlined text-secondary text-3xl">bug_report</span>
+        </div>
+        <div class="relative z-10">
+          <p class="text-sm font-label text-on-surface-variant uppercase tracking-widest mb-1">Total CVEs</p>
+          <h3 class="text-3xl font-extrabold font-headline tracking-tight stat-val">412</h3>
+        </div>
+        <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+          <span class="material-symbols-outlined text-8xl">bug_report</span>
+        </div>
+      </div>
+
+      <div class="bg-surface-container-low p-6 rounded-xl tonal-stack hover:bg-surface-container border border-outline-variant/10 relative overflow-hidden group cursor-pointer transition-all">
+        <div class="flex justify-between items-start mb-4">
+          <span class="material-symbols-outlined text-tertiary text-3xl">warning</span>
+        </div>
+        <div class="relative z-10">
+          <p class="text-sm font-label text-on-surface-variant uppercase tracking-widest mb-1">Critical Issues</p>
+          <h3 class="text-3xl font-extrabold font-headline tracking-tight stat-val">24</h3>
+        </div>
+        <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+          <span class="material-symbols-outlined text-8xl">warning</span>
+        </div>
+      </div>
+
+      <div class="bg-surface-container-low p-6 rounded-xl tonal-stack hover:bg-surface-container border border-outline-variant/10 relative overflow-hidden group cursor-pointer transition-all">
+        <div class="flex justify-between items-start mb-4">
+          <span class="material-symbols-outlined text-error text-3xl">crisis_alert</span>
+        </div>
+        <div class="relative z-10">
+          <p class="text-sm font-label text-on-surface-variant uppercase tracking-widest mb-1">Risk Score</p>
+          <h3 class="text-3xl font-extrabold font-headline tracking-tight stat-val">84.2</h3>
+        </div>
+        <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+          <span class="material-symbols-outlined text-8xl">crisis_alert</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- Left Column -->
+      <div class="lg:col-span-4 flex flex-col gap-8">
+        <!-- Ecosystem Health Donut -->
+        <div class="bg-surface-container-high p-8 rounded-xl flex flex-col items-center justify-center relative overflow-hidden">
+          <h3 class="text-xl font-bold font-headline mb-8 self-start">Ecosystem Health</h3>
+          <div class="relative w-48 h-48">
+            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 192 192">
+              <circle class="text-surface-container-highest" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-width="12"/>
+              <circle class="text-primary" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-dasharray="552.92" stroke-dashoffset="138" stroke-width="12" stroke-linecap="round"/>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span class="text-4xl font-extrabold font-headline">75%</span>
+              <span class="text-xs text-on-surface-variant font-bold tracking-widest uppercase">Stable</span>
+            </div>
+          </div>
+          <p class="mt-8 text-sm text-on-surface-variant text-center">Safety threshold reached for <span class="text-primary font-semibold">92%</span> of integrated components.</p>
+        </div>
+
+        <!-- Severity Breakdown -->
+        <div class="bg-surface-container-high p-8 rounded-xl flex flex-col">
+          <h3 class="text-xl font-bold font-headline mb-6">Severity Breakdown</h3>
+          <div class="flex items-center justify-between gap-4">
+            <div class="relative w-32 h-32 flex-shrink-0">
+              <svg class="w-full h-full" viewBox="0 0 128 128">
+                <circle class="text-tertiary" cx="64" cy="64" fill="transparent" r="50" stroke="currentColor" stroke-dasharray="314" stroke-dashoffset="0" stroke-width="20"/>
+                <circle class="text-secondary" cx="64" cy="64" fill="transparent" r="50" stroke="currentColor" stroke-dasharray="314" stroke-dashoffset="100" stroke-width="20"/>
+                <circle class="text-error" cx="64" cy="64" fill="transparent" r="50" stroke="currentColor" stroke-dasharray="314" stroke-dashoffset="240" stroke-width="20"/>
+              </svg>
+            </div>
+            <div class="flex flex-col gap-3 flex-1 pl-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-error"></div><span class="text-xs font-semibold">Critical</span></div>
+                <span class="text-xs font-bold">12%</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-tertiary"></div><span class="text-xs font-semibold">High</span></div>
+                <span class="text-xs font-bold">34%</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-secondary"></div><span class="text-xs font-semibold">Medium</span></div>
+                <span class="text-xs font-bold">54%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="lg:col-span-8 flex flex-col gap-8">
+        <!-- Vulnerable Applications -->
+        <div class="bg-surface-container p-8 rounded-xl">
+          <div class="flex justify-between items-end mb-8">
+            <div>
+              <h3 class="text-xl font-bold font-headline">Vulnerable Applications</h3>
+              <p class="text-sm text-on-surface-variant">Top 5 entities requiring immediate remediation.</p>
+            </div>
+            <a href="applications.html" class="text-primary text-sm font-bold flex items-center gap-1 hover:text-white transition-colors">
+              View Full List <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+          </div>
+          <div class="space-y-6">
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-bold tracking-tight uppercase text-on-surface-variant">
+                <span>Core-API-Gateway</span><span class="text-error">92 Instances</span>
+              </div>
+              <div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden">
+                <div class="h-full bg-error rounded-full transition-all duration-1000" style="width:85%"></div>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-bold tracking-tight uppercase text-on-surface-variant">
+                <span>Data-Warehouse-Sync</span><span class="text-tertiary">64 Instances</span>
+              </div>
+              <div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden">
+                <div class="h-full bg-tertiary rounded-full transition-all duration-1000" style="width:65%"></div>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-bold tracking-tight uppercase text-on-surface-variant">
+                <span>Identity-Provider-v2</span><span class="text-tertiary">42 Instances</span>
+              </div>
+              <div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden">
+                <div class="h-full bg-tertiary rounded-full transition-all duration-1000" style="width:45%"></div>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-bold tracking-tight uppercase text-on-surface-variant">
+                <span>Web-Frontend-Main</span><span class="text-secondary">38 Instances</span>
+              </div>
+              <div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden">
+                <div class="h-full bg-secondary rounded-full transition-all duration-1000" style="width:30%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent CVE Activity -->
+        <div class="bg-surface-container-low rounded-xl overflow-hidden">
+          <div class="px-8 py-6 border-b border-white/5 flex justify-between items-center">
+            <h3 class="text-lg font-bold font-headline">Recent CVE Activity</h3>
+            <span class="px-3 py-1 bg-surface-container-highest text-[10px] font-bold tracking-widest rounded-full uppercase text-primary">Update: 2m ago</span>
+          </div>
+          <div class="divide-y divide-white/5">
+            <div class="px-8 py-5 flex items-center justify-between hover:bg-white/5 transition-colors cursor-pointer group">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded bg-error/10 flex items-center justify-center text-error"><span class="material-symbols-outlined">security</span></div>
+                <div>
+                  <h4 class="font-bold text-sm group-hover:text-primary transition-colors">CVE-2024-12345</h4>
+                  <p class="text-xs text-on-surface-variant">Remote Code Execution in Spring Boot components</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-xs font-bold text-error mb-1">9.8 CRITICAL</div>
+                <div class="text-[10px] text-on-surface-variant">DETECTED 4H AGO</div>
+              </div>
+            </div>
+            <div class="px-8 py-5 flex items-center justify-between hover:bg-white/5 transition-colors cursor-pointer group">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded bg-tertiary/10 flex items-center justify-center text-tertiary"><span class="material-symbols-outlined">database</span></div>
+                <div>
+                  <h4 class="font-bold text-sm group-hover:text-primary transition-colors">CVE-2024-9982</h4>
+                  <p class="text-xs text-on-surface-variant">SQL Injection vulnerability in Legacy Auth module</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-xs font-bold text-tertiary mb-1">7.5 HIGH</div>
+                <div class="text-[10px] text-on-surface-variant">DETECTED 1D AGO</div>
+              </div>
+            </div>
+            <div class="px-8 py-5 flex items-center justify-between hover:bg-white/5 transition-colors cursor-pointer group">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded bg-secondary/10 flex items-center justify-center text-secondary"><span class="material-symbols-outlined">link</span></div>
+                <div>
+                  <h4 class="font-bold text-sm group-hover:text-primary transition-colors">CVE-2023-45612</h4>
+                  <p class="text-xs text-on-surface-variant">Cross-Site Scripting (XSS) in Dashboard UI</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-xs font-bold text-secondary mb-1">5.2 MEDIUM</div>
+                <div class="text-[10px] text-on-surface-variant">DETECTED 3D AGO</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Banner -->
+    <section class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-gradient-to-br from-surface-container to-surface-container-low rounded-2xl p-10 overflow-hidden relative border border-outline-variant/10">
+      <div class="absolute -right-20 -top-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+      <div class="relative z-10">
+        <h2 class="text-3xl font-extrabold font-headline tracking-tighter mb-4 leading-tight">Advanced Threat Intelligence <br/>Now Integrated.</h2>
+        <p class="text-on-surface-variant mb-8 leading-relaxed max-w-md">Our sentinel logic now leverages real-time dark web monitoring to predict zero-day exploits before they hit your infrastructure.</p>
+        <button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-bold font-headline tracking-tight hover:scale-105 transition-transform active:scale-95">Enable Proactive Shield</button>
+      </div>
+      <div class="h-64 rounded-xl overflow-hidden relative border border-white/5 bg-surface-container-high flex items-center justify-center">
+        <div class="text-center p-8">
+          <div class="text-6xl font-black font-headline text-primary/30 mb-2">AI</div>
+          <div class="text-sm text-on-surface-variant">Powered by DISAI Intelligence Engine</div>
+          <div class="mt-4 flex gap-2 justify-center">
+            <span class="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">Real-time</span>
+            <span class="px-3 py-1 bg-error/10 text-error text-xs font-bold rounded-full">Zero-day</span>
+            <span class="px-3 py-1 bg-secondary/10 text-secondary text-xs font-bold rounded-full">ML-Powered</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="md:pl-72 py-6 px-8 text-on-surface-variant text-xs flex justify-between items-center opacity-50 font-label border-t border-outline-variant/10">
+  <p>© 2024 DISAI — Defend. Identify. Secure. AI.</p>
+  <div class="flex gap-6">
+    <a class="hover:text-primary" href="#">Documentation</a>
+    <a class="hover:text-primary" href="#">System Status</a>
+    <a class="hover:text-primary" href="#">Privacy Protocol</a>
+  </div>
+</footer>
+
+</body>
+</html>
