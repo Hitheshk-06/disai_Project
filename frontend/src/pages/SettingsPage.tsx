@@ -262,6 +262,57 @@ export default function SettingsPage({ user, onUserUpdate }: { user: User; onUse
           <button className="px-4 py-2 bg-danger/10 border border-danger text-danger rounded-lg text-xs font-bold hover:bg-danger hover:text-white transition-all">Delete Account</button>
         </div>
       </div>
+
+      {/* NVD Sync */}
+      <NVDSyncPanel />
+
+      {/* Danger Zone */}
+      <div className="bg-surface-container-low rounded-xl p-8 border border-danger/20">
+        <h3 className="text-lg font-bold text-danger mb-2">Danger Zone</h3>
+        <p className="text-xs text-outline mb-4">These actions are irreversible.</p>
+        <div className="flex flex-wrap gap-2">
+          <button className="px-4 py-2 border border-danger/30 text-danger rounded-lg text-xs font-semibold hover:bg-danger/10 transition-colors">Reset Settings</button>
+          <button className="px-4 py-2 bg-danger/10 border border-danger text-danger rounded-lg text-xs font-bold hover:bg-danger hover:text-white transition-all">Delete Account</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function NVDSyncPanel() {
+  const [syncing, setSyncing] = useState(false)
+  const [result, setResult] = useState<{ message: string; inserted: number; updated: number; totalInDB: number } | null>(null)
+
+  const handleSync = async () => {
+    setSyncing(true); setResult(null)
+    try {
+      const r = await api.nvd.sync(20)
+      setResult(r)
+    } catch (e: any) {
+      setResult({ message: e.message, inserted: 0, updated: 0, totalInDB: 0 })
+    } finally { setSyncing(false) }
+  }
+
+  return (
+    <div className="bg-surface-container-low rounded-xl p-8 border border-outline-variant/10">
+      <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+        <span className="material-symbols-outlined text-primary">cloud_sync</span>
+        NVD Database Sync
+      </h3>
+      <p className="text-xs text-outline mb-4">Pull the latest CVEs from the National Vulnerability Database (NVD API 2.0).</p>
+      {result && (
+        <div className="mb-4 p-3 bg-surface-container rounded-lg text-xs space-y-1">
+          <p className="font-semibold text-on-surface">{result.message}</p>
+          <p className="text-outline">Inserted: {result.inserted} · Updated: {result.updated} · Total in DB: {result.totalInDB}</p>
+        </div>
+      )}
+      <button onClick={handleSync} disabled={syncing}
+        className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg text-sm font-bold hover:brightness-110 transition-all disabled:opacity-60">
+        {syncing
+          ? <><span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>Syncing...</>
+          : <><span className="material-symbols-outlined text-sm">sync</span>Sync Now (20 CVEs)</>
+        }
+      </button>
     </div>
   )
 }

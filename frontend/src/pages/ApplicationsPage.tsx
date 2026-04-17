@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { api, type Application } from '../lib/api'
 import { Modal } from '../components/Modal'
 import { Toast, useToast } from '../components/Toast'
@@ -15,6 +16,7 @@ export default function ApplicationsPage() {
   const [form, setForm] = useState({ name: '', version: '', description: '' })
   const [saving, setSaving] = useState(false)
   const { toast, show, hide } = useToast()
+  const navigate = useNavigate()
 
   const load = () => api.applications.list().then(setApplications).catch(console.error)
   useEffect(() => { load() }, [])
@@ -139,7 +141,8 @@ export default function ApplicationsPage() {
                   <span>·</span>
                   <span>{app.components} components</span>
                 </div>
-                <button className="text-primary text-xs font-bold flex items-center gap-0.5 group-hover:gap-1.5 transition-all">
+                <button onClick={() => navigate(`/applications/${app.id}`)}
+                  className="text-primary text-xs font-bold flex items-center gap-0.5 group-hover:gap-1.5 transition-all">
                   Report <span className="material-symbols-outlined text-xs">arrow_forward</span>
                 </button>
               </div>

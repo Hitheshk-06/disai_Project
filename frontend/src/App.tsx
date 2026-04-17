@@ -2,18 +2,21 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import Layout from './components/Layout'
 import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
 import DashboardPage from './pages/DashboardPage'
 import SBOMManagerPage from './pages/SBOMManagerPage'
 import CVEExplorerPage from './pages/CVEExplorerPage'
 import VulnerabilityGraphPage from './pages/VulnerabilityGraphPage'
 import RiskAnalyticsPage from './pages/RiskAnalyticsPage'
 import ApplicationsPage from './pages/ApplicationsPage'
+import ApplicationDetailPage from './pages/ApplicationDetailPage'
 import SettingsPage from './pages/SettingsPage'
 import { api, type User } from './lib/api'
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [showRegister, setShowRegister] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -30,6 +33,7 @@ export default function App() {
   const handleLogin = (token: string, u: User) => {
     localStorage.setItem('token', token)
     setUser(u)
+    setShowRegister(false)
   }
 
   const handleLogout = () => {
@@ -46,7 +50,10 @@ export default function App() {
   }
 
   if (!user) {
-    return <LoginPage onLogin={handleLogin} />
+    if (showRegister) {
+      return <RegisterPage onLogin={handleLogin} onBack={() => setShowRegister(false)} />
+    }
+    return <LoginPage onLogin={handleLogin} onRegister={() => setShowRegister(true)} />
   }
 
   return (
@@ -59,6 +66,7 @@ export default function App() {
         <Route path="/vulnerability-graph" element={<VulnerabilityGraphPage />} />
         <Route path="/risk-analytics" element={<RiskAnalyticsPage />} />
         <Route path="/applications" element={<ApplicationsPage />} />
+        <Route path="/applications/:id" element={<ApplicationDetailPage />} />
         <Route path="/settings" element={<SettingsPage user={user} onUserUpdate={setUser} />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

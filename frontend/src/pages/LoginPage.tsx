@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 
 import { api, type User } from '../lib/api'
-interface LoginPageProps { onLogin: (token: string, user: User) => void }
+interface LoginPageProps { onLogin: (token: string, user: User) => void; onRegister: () => void }
 
-export default function LoginPage({ onLogin }: LoginPageProps) {
+export default function LoginPage({ onLogin, onRegister }: LoginPageProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -144,7 +144,9 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           </button>
 
           <p className="text-center text-[10px] text-outline mt-6 leading-relaxed">
-            Protected by enterprise-grade security. <br />
+            Don't have an account?{' '}
+            <button onClick={onRegister} className="text-primary font-semibold hover:underline">Create one</button>
+            <br />
             <span className="text-primary cursor-pointer hover:underline">Terms</span> · <span className="text-primary cursor-pointer hover:underline">Privacy</span>
           </p>
         </div>

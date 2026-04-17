@@ -4,7 +4,41 @@ const { authMiddleware } = require('../middleware/auth')
 
 const router = express.Router()
 
-// GET /api/applications
+// GET /api/applications/:id/detail — full detail with components + matched CVEs
+router.get('/:id/detail', authMiddleware, (req, res) => {
+  const app = db.prepare('SELECT * FROM applications WHERE id = ?').get(req.params.id)
+  if (!app) return res.status(404).json({ error: 'Application not found' })
+
+  const components = db.prepare('SELECT * FROM sbom_components WHERE app_name = ?').all(app.name)
+  const { matchComponentsToCVEs } = require('../utils/cveMatch')
+  const matches = matchComponentsToCVEs(components)
+
+  const matchedCVEs = matches.map(m => ({
+    cveId: m.cve.id,
+    severity: m.cve.severity,
+    cvssScore: m.cve.cvss_score,
+    description: m.cve.description,
+    vector: m.cve.vector,
+    published: m.cve.published,
+    component: m.component.component_name,
+    componentVersion: m.component.component_version,
+    vendor: m.component.vendor,
+  }))
+
+  res.json({
+    ...mapApp(app),
+    componentList: components.map(c => ({
+      id: c.id,
+      name: c.component_name,
+      version: c.component_version,
+      vendor: c.vendor,
+      hasVulnerability: matches.some(m => m.component.id === c.id),
+    })),
+    matchedCVEs,
+  })
+})
+
+// GET /api/applications — list all
 router.get('/', authMiddleware, (req, res) => {
   const apps = db.prepare('SELECT * FROM applications ORDER BY risk_score DESC').all()
   // Map snake_case to camelCase to match frontend expectations

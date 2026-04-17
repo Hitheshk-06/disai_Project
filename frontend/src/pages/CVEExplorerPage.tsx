@@ -1,20 +1,22 @@
 import { useState, useEffect, useCallback } from 'react'
-import { api, type CVERecord } from '../lib/api'
+import { api, type CVERecord, type Pagination } from '../lib/api'
 
 type Severity = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW'
 
 export default function CVEExplorerPage() {
   const [cves, setCves] = useState<CVERecord[]>([])
   const [allCves, setAllCves] = useState<CVERecord[]>([])
+  const [pagination, setPagination] = useState<Pagination>({ page: 1, limit: 20, total: 0, totalPages: 1 })
   const [search, setSearch] = useState('')
   const [severityFilter, setSeverityFilter] = useState<Record<Severity, boolean>>({ CRITICAL: true, HIGH: true, MEDIUM: true, LOW: true })
   const [selectedCVE, setSelectedCVE] = useState<CVERecord | null>(null)
   const [cvssRange, setCvssRange] = useState([0, 10])
   const [loading, setLoading] = useState(false)
+  const [page, setPage] = useState(1)
 
   // Load all on mount for stats
   useEffect(() => {
-    api.cves.list().then(data => { setAllCves(data); setCves(data) }).catch(console.error)
+    api.cves.list({ limit: 100 }).then(res => setAllCves(res.data)).catch(console.error)
   }, [])
 
   // Debounced API search
@@ -26,8 +28,11 @@ export default function CVEExplorerPage() {
       severity: activeSeverities.length < 4 ? activeSeverities.join(',') : undefined,
       minScore: cvssRange[0] > 0 ? cvssRange[0] : undefined,
       maxScore: cvssRange[1] < 10 ? cvssRange[1] : undefined,
-    }).then(setCves).catch(console.error).finally(() => setLoading(false))
-  }, [search, severityFilter, cvssRange])
+      page,
+      limit: 20,
+    }).then(res => { setCves(res.data); setPagination(res.pagination) })
+      .catch(console.error).finally(() => setLoading(false))
+  }, [search, severityFilter, cvssRange, page])
 
   useEffect(() => {
     const t = setTimeout(fetchFiltered, 300)
@@ -171,7 +176,7 @@ export default function CVEExplorerPage() {
         {/* Results */}
         <div className="lg:col-span-9">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-bold text-on-surface">{cves.length} Results</span>
+            <span className="text-sm font-bold text-on-surface">{pagination.total} Results</span>
             {search && <span className="text-xs text-outline">Searching: "{search}"</span>}
           </div>
 
@@ -210,6 +215,29 @@ export default function CVEExplorerPage() {
               )
             })}
           </div>
+
+          {/* Pagination */}
+          {pagination.totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-6">
+              <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+                className="px-3 py-1.5 rounded-lg bg-surface-container text-xs font-semibold text-outline hover:text-on-surface disabled:opacity-40 transition-colors">
+                ← Prev
+              </button>
+              {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
+                const pg = Math.max(1, Math.min(pagination.totalPages - 4, page - 2)) + i
+                return (
+                  <button key={pg} onClick={() => setPage(pg)}
+                    className={`w-8 h-8 rounded-lg text-xs font-bold transition-colors ${pg === page ? 'bg-primary text-white' : 'bg-surface-container text-outline hover:text-on-surface'}`}>
+                    {pg}
+                  </button>
+                )
+              })}
+              <button onClick={() => setPage(p => Math.min(pagination.totalPages, p + 1))} disabled={page === pagination.totalPages}
+                className="px-3 py-1.5 rounded-lg bg-surface-container text-xs font-semibold text-outline hover:text-on-surface disabled:opacity-40 transition-colors">
+                Next →
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

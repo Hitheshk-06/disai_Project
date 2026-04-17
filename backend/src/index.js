@@ -16,6 +16,7 @@ const dashboardRoutes = require('./routes/dashboard')
 const graphRoutes = require('./routes/graph')
 const analyticsRoutes = require('./routes/analytics')
 const settingsRoutes = require('./routes/settings')
+const nvdRoutes = require('./routes/nvd')
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -53,6 +54,7 @@ app.use('/api/dashboard', dashboardRoutes)
 app.use('/api/graph', graphRoutes)
 app.use('/api/analytics', analyticsRoutes)
 app.use('/api/settings', settingsRoutes)
+app.use('/api/nvd', nvdRoutes)
 
 // ─── Health check ─────────────────────────────────
 app.get('/api/health', (req, res) => {
